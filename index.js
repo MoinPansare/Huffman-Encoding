@@ -1,6 +1,6 @@
 
 
-var inputString = "Build the Huffman tree for the set of characters in this question. Include all characters including punctuation and spaces. How many bits are saved in the storage of this question using Huffman trees versus a storage based on a fixed-length encoding such as ASCII?";
+var inputString = "hi abhijeet";
 var initiArray = [];
 var arrayToTraverse = [];
 var removedList = [];
@@ -40,34 +40,76 @@ for (var i = 0; i < initiArray.length; i++) {
 
 initiArray = sortArray(initiArray);
 
-while (initiArray.length > 1) {
-  getNewObject();
-  initiArray = sortArray(initiArray);
-}
+// while (initiArray.length > 1) {
+//   getNewObject();
+//   initiArray = sortArray(initiArray);
+// }
+generateBinaryTree();
 
-for (var i = 0; i < initiArray.length; i++) {
-  console.log("Character : " + initiArray[i].character + "\tFrequency : " + initiArray[i].frequency);
-}
+// for (var i = 0; i < initiArray.length; i++) {
+//   console.log("Character : " + initiArray[i].character + "\tFrequency : " + initiArray[i].frequency);
+// }
 
-removedList.push(initiArray[0]);
+// removedList.push(initiArray[0]);
 
 // for (var i = 0; i < removedList.length; i++) {
 //   console.log(removedList[i].character);
 // }
-
-var currentSize = 0;
-for (var i = 0; i < arrayToTraverse.length; i++) {
-  var binary = getBinaryFor(arrayToTraverse[i].character);
-  console.log("Character : " + arrayToTraverse[i].character + "\t encoding : " + binary);
-  currentSize = currentSize + binary.length * arrayToTraverse[i].frequency;
-}
-
-console.log("Total Size Requirement : " + (inputString.length * 8) + " bits");
-console.log("Compressed Size : " + currentSize + " bits");
-console.log("Percentage Compression : " + (100 - (Math.round((currentSize/(inputString.length * 8))*100 * 100) / 100)) + "%");
+//
+// var currentSize = 0;
+// for (var i = 0; i < arrayToTraverse.length; i++) {
+//   var binary = getBinaryFor(arrayToTraverse[i].character);
+//   console.log("Character : " + arrayToTraverse[i].character + "\t encoding : " + binary);
+//   currentSize = currentSize + binary.length * arrayToTraverse[i].frequency;
+// }
+//
+// console.log("Total Size Requirement : " + (inputString.length * 8) + " bits");
+// console.log("Compressed Size : " + currentSize + " bits");
+// console.log("Percentage Compression : " + (100 - (Math.round((currentSize/(inputString.length * 8))*100 * 100) / 100)) + "%");
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Functions
+
+function getEncoding(){
+
+  var currentSize = 0;
+  for (var i = 0; i < arrayToTraverse.length; i++) {
+    var binary = getBinaryFor(arrayToTraverse[i].character);
+    console.log("Character : " + arrayToTraverse[i].character + "\t encoding : " + binary);
+    currentSize = currentSize + binary.length * arrayToTraverse[i].frequency;
+  }
+
+  console.log("Total Size Requirement : " + (inputString.length * 8) + " bits");
+  console.log("Compressed Size : " + currentSize + " bits");
+  console.log("Percentage Compression : " + (100 - (Math.round((currentSize/(inputString.length * 8))*100 * 100) / 100)) + "%");
+
+}
+
+function generateBinaryTree(){
+
+  // while (initiArray.length > 1) {
+
+  // }
+
+  if (initiArray.length > 1) {
+    getNewObject();
+    initiArray = sortArray(initiArray);
+    setTimeout(generateBinaryTree, 3000);
+
+    console.log("\n\nRemoved List");
+
+    for (var i = 0; i < removedList.length; i++) {
+      console.log(removedList[i]);
+    }
+
+  }else{
+    removedList.push(initiArray[0]);
+    getEncoding();
+  }
+
+
+}
+
 
 function getBinaryFor(character){
   var truncatedList = [];
@@ -138,6 +180,8 @@ function getNewObject(){
 
   initiArray.push(newObject);
   initiArray = sortArray(initiArray);
+
+  console.log(JSON.stringify(newObject));
 
 }
 
