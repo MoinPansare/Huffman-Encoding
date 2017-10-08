@@ -41,13 +41,13 @@ function setPositionForParents(i, arrayToTraverse){debugger
       var parent1Index = arrayToTraverse.findIndex(el => el.id == parentArray.parent1);
       var parent2Index = arrayToTraverse.findIndex(el => el.id == parentArray.parent2);
       if(parent1Index !== -1){
-        arrayToTraverse[parent1Index].left = x - 20;
+        arrayToTraverse[parent1Index].left = x - ((arrayToTraverse[parent1Index].level + 1) * 100);
         arrayToTraverse[parent1Index].top = y + 90;
-        arrayToTraverse[parent2Index].left = x + 100;
+        arrayToTraverse[parent2Index].left = x + ((arrayToTraverse[parent1Index].level + 1) * 100);
         arrayToTraverse[parent2Index].top = y + 90;
       }
     // ----------------------------------------------
-   // } 
+   // }
   }
 }
 var draw = function(arrayToTraverse){
@@ -62,14 +62,14 @@ var draw = function(arrayToTraverse){
           }
           level = arrayToTraverse[i].frequency;
         }
-        $( "<div id="+arrayToTraverse[i].character+arrayToTraverse[i].frequency+" class='numberCircle'>"+"    "+arrayToTraverse[i].frequency+" C: "+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
-        
+        $( "<div id="+arrayToTraverse[i].character+arrayToTraverse[i].frequency+" class='numberCircle'>"+"    "+arrayToTraverse[i].frequency+" "+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
+
 
         if(arrayToTraverse[i].top || arrayToTraverse[i].left){
           $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].frequency).css("top", arrayToTraverse[i].top);
           $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].frequency).css("left", arrayToTraverse[i].left);
         }
-        
+
         setPositionForParents(i, arrayToTraverse);
   }
 }
