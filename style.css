@@ -251,10 +251,12 @@ button:focus {
 	width: 250px;
 }
 .numberCircle {
+      margin-left: auto;
+    margin-right: auto;
     border-radius: 50%;
         width: auto !important;
     behavior: url(PIE.htc); /* remove if you don't care about IE8 */
-		margin: 0px 8px 0px 8px;		
+		/*margin: 0px 8px 0px 8px;		*/
     width: 36px;
     height: 36px;
     padding: 8px;
