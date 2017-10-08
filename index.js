@@ -33,7 +33,7 @@ function setPositionForParents(i, arrayToTraverse){debugger
     if(parentArray.parent1 !== -1){
              // that.setPositionForParents($("#"+parentArray[i].character+i), parentArray.filter(function (el) {return el.level = level + 1}));
    // ---------------------
-      var node = $("#"+parentArray.character+parentArray.frequency);
+      var node = $("#"+parentArray.id);
       var position = node.position();
       var y = position.top;
       var x = position.left;
@@ -62,12 +62,12 @@ var draw = function(arrayToTraverse){
           }
           level = arrayToTraverse[i].frequency;
         }
-        $( "<div id="+arrayToTraverse[i].character+arrayToTraverse[i].frequency+" class='numberCircle'>"+"    "+arrayToTraverse[i].frequency+" "+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
+        $( "<div id="+arrayToTraverse[i].id+" class='numberCircle'>"+"    "+arrayToTraverse[i].frequency+" "+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
 
 
         if(arrayToTraverse[i].top || arrayToTraverse[i].left){
-          $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].frequency).css("top", arrayToTraverse[i].top);
-          $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].frequency).css("left", arrayToTraverse[i].left);
+          $("#"+ arrayToTraverse[i].id).css("top", arrayToTraverse[i].top);
+          $("#"+ arrayToTraverse[i].id).css("left", arrayToTraverse[i].left);
         }
 
         setPositionForParents(i, arrayToTraverse);
