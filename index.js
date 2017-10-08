@@ -1,36 +1,42 @@
+$(document).ready(function() {
+  $("#Evaluate").click(
+ function(){
+$(".graph").html("");
+this.inputString = $("input").val();//"Build the Huffman tree for the set of characters in this question. Include all characters including punctuation and spaces. How many bits are saved in the storage of this question using Huffman trees versus a storage based on a fixed-length encoding such as ASCII?";
+this.initiArray = [];
+this.arrayToTraverse = [];
+this.removedList = [];
 
+var draw = function(array){debugger
+  $( "<div class='numberCircle'>"+array.character+"</p>" ).appendTo(".graph");
+}
 
-var inputString = "Hiabhijeet";
-var initiArray = [];
-var arrayToTraverse = [];
-var removedList = [];
-
-for (var i = 0, len = inputString.length; i < len; i++) {
+for (var i = 0, len = this.inputString.length; i < len; i++) {
 
   let obj = {
     "parent1" : -1,
     "parent2" : -1,
     "id" : guid(),
-    "character" : inputString[i],
-    "frequency" : (inputString.split(inputString[i]).length - 1),
-    "level" : 0
+    "character" : this.inputString[i],
+    "frequency" : (this.inputString.split(this.inputString[i]).length - 1)
   };
 
   var found = false;
-  for (var j = 0; j < initiArray.length; j++) {
-    if (initiArray[j].character == obj.character) {
+  for (var j = 0; j < this.initiArray.length; j++) {
+    if (this.initiArray[j].character == obj.character) {
       found = true;
       break;
     }
   }
   if (!found) {
-    initiArray.push(obj);
-    arrayToTraverse.push(obj);
+    this.initiArray.push(obj);
+    this.arrayToTraverse.push(obj);
   }
 }
 
-for (var i = 0; i < initiArray.length; i++) {
-  console.log("Character : " + initiArray[i].character + "\tFrequency : " + initiArray[i].frequency);
+for (var i = 0; i < this.initiArray.length; i++) {
+  console.log("Character : " + this.initiArray[i].character + "\tFrequency : " + this.initiArray[i].frequency);
+  draw(this.initiArray[i]);
 }
 
 // console.log("\n\n\n Adding first 2 objects");
@@ -39,46 +45,46 @@ for (var i = 0; i < initiArray.length; i++) {
 //   console.log("Character : " + initiArray[i].character + "\tFrequency : " + initiArray[i].frequency);
 // }
 
-initiArray = sortArray(initiArray);
-
-while (initiArray.length > 1) {
-  getNewObject();
-  initiArray = sortArray(initiArray);
+this.initiArray = sortArray(this.initiArray);
+var that = this;
+while (this.initiArray.length > 1) {
+  getNewObject(that);
+  this.initiArray = sortArray(this.initiArray);
 }
 
-for (var i = 0; i < initiArray.length; i++) {
-  console.log("Character : " + initiArray[i].character + "\tFrequency : " + initiArray[i].frequency);
+for (var i = 0; i < this.initiArray.length; i++) {
+  console.log("Character : " + this.initiArray[i].character + "\tFrequency : " + this.initiArray[i].frequency);
 }
 
-removedList.push(initiArray[0]);
+this.removedList.push(this.initiArray[0]);
 
 // for (var i = 0; i < removedList.length; i++) {
 //   console.log(removedList[i].character);
 // }
 
 var currentSize = 0;
-for (var i = 0; i < arrayToTraverse.length; i++) {
-  var binary = getBinaryFor(arrayToTraverse[i].character);
-  console.log("Character : " + arrayToTraverse[i].character + "\t encoding : " + binary);
-  currentSize = currentSize + binary.length * arrayToTraverse[i].frequency;
+var that = this;
+for (var i = 0; i < this.arrayToTraverse.length; i++) {
+  var binary = getBinaryFor(this.arrayToTraverse[i].character, that);
+  console.log("Character : " + this.arrayToTraverse[i].character + "\t encoding : " + binary);
+  currentSize = currentSize + binary.length * that.arrayToTraverse[i].frequency;
 }
+$("#totalSize").text((this.inputString.length * 8) + " bits");
+$("#compressedSize").text(currentSize + " bits");
+$("#PercentageCompression").text(currentSize + (100 - (Math.round((currentSize/(this.inputString.length * 8))*100 * 100) / 100)) + "%");
 
-console.log("Total Size Requirement : " + (inputString.length * 8) + " bits");
-console.log("Compressed Size : " + currentSize + " bits");
-console.log("Percentage Compression : " + (100 - (Math.round((currentSize/(inputString.length * 8))*100 * 100) / 100)) + "%");
-
-for (var i = 0; i < removedList.length; i++) {
-  console.log("Character : " + removedList[i].character + "\t Level : " + removedList[i].level);
-}
-
+// console.log("Total Size Requirement : " + (this.inputString.length * 8) + " bits");
+// console.log("Compressed Size : " + currentSize + " bits");
+// console.log("Percentage Compression : " + (100 - (Math.round((currentSize/(this.inputString.length * 8))*100 * 100) / 100)) + "%");
+N
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Functions
 
-function getBinaryFor(character){
+function getBinaryFor(character, that){
   var truncatedList = [];
-  for (var i = 0; i < removedList.length; i++) {
-    if ((removedList[i].character.split(character).length - 1) != 0) {
-      truncatedList.push(removedList[i]);
+  for (var i = 0; i < that.removedList.length; i++) {
+    if ((that.removedList[i].character.split(character).length - 1) != 0) {
+      truncatedList.push(that.removedList[i]);
     }
   }
   // for (var i = 0; i < truncatedList.length; i++) {
@@ -123,32 +129,26 @@ function checkIfParentIdExists(list,current){
 }
 
 
-function getNewObject(){
-  var obj1 = initiArray[0];
-  var obj2 = initiArray[1];
-
-  var max = obj1.level + 1;
-  if (obj2.level > obj1.level) {
-    max = obj2.level + 1;
-  }
+function getNewObject(that){
+  var obj1 = that.initiArray[0];
+  var obj2 = that.initiArray[1];
 
   var newObject = {
     "parent1" : obj1.id,
     "parent2" : obj2.id,
     "character" : obj1.character + "" + obj2.character,
     "frequency" : obj1.frequency + obj2.frequency,
-    "id" : guid(),
-    "level" : max,
+    "id" : guid()
   };
 
-  removedList.push(obj1);
-  removedList.push(obj2);
+  that.removedList.push(obj1);
+  that.removedList.push(obj2);
 
-  initiArray.splice(1, 1);
-  initiArray.splice(0, 1);
+  that.initiArray.splice(1, 1);
+  that.initiArray.splice(0, 1);
 
-  initiArray.push(newObject);
-  initiArray = sortArray(initiArray);
+  that.initiArray.push(newObject);
+  that.initiArray = sortArray(that.initiArray);
 
 }
 
@@ -177,3 +177,6 @@ function guid() {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 }
+return this;
+});
+});
