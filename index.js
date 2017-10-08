@@ -127,13 +127,18 @@ function getNewObject(){
   var obj1 = initiArray[0];
   var obj2 = initiArray[1];
 
+  var max = obj1.level + 1;
+  if (obj2.level > obj1.level) {
+    max = obj2.level + 1;
+  }
+
   var newObject = {
     "parent1" : obj1.id,
     "parent2" : obj2.id,
     "character" : obj1.character + "" + obj2.character,
     "frequency" : obj1.frequency + obj2.frequency,
     "id" : guid(),
-    "level" : obj1.level + 1,
+    "level" : max,
   };
 
   removedList.push(obj1);
