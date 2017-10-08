@@ -250,11 +250,14 @@ button:focus {
     height: 200px;
 	width: 250px;
 }
-.numberCircle {
+.level1{
     margin-left: auto;
 
     margin-right: auto;
-
+}
+.numberCircle {
+  
+    position: absolute;
     border-radius: 50%;
         width: auto !important;
     behavior: url(PIE.htc); /* remove if you don't care about IE8 */

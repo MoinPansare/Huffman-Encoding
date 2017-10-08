@@ -27,45 +27,27 @@ this.removedList = [];
 //     // ----------------------------------------------
 //   }
 // }
-function setPositionForParents(levelToSet){debugger
-  var parentArray = arrayToTraverse.findIndex(el => el.frequency == levelToSet+1);
-  for(var i = 0; i < parentArray.length; i++){
-    if(parentArray[i].parent1 !== -1){
+function setPositionForParents(i, arrayToTraverse){debugger
+  var parentArray = arrayToTraverse[i];
+  // for(var i = 0; i < parentArray.length; i++){
+    if(parentArray.parent1 !== -1){
              // that.setPositionForParents($("#"+parentArray[i].character+i), parentArray.filter(function (el) {return el.level = level + 1}));
    // ---------------------
-      var node = $("#"+parentArray[i].character+parentArray[i].binary);
+      var node = $("#"+parentArray.character+parentArray.frequency);
       var position = node.position();
       var y = position.top;
       var x = position.left;
 
-      var parent1Index = arrayToTraverse.findIndex(el => el.id == parentArray[i].parent1);
-      var parent2Index = arrayToTraverse.findIndex(el => el.id == parentArray[i].parent2);
+      var parent1Index = arrayToTraverse.findIndex(el => el.id == parentArray.parent1);
+      var parent2Index = arrayToTraverse.findIndex(el => el.id == parentArray.parent2);
       if(parent1Index !== -1){
-        arrayToTraverse[parent1Index].left = x - 5;
-        arrayToTraverse[parent1Index].top = y - 5;
-        arrayToTraverse[parent2Index].left = x + 5;
-        arrayToTraverse[parent2Index].top = y + 5;
+        arrayToTraverse[parent1Index].left = x - 20;
+        arrayToTraverse[parent1Index].top = y + 90;
+        arrayToTraverse[parent2Index].left = x + 100;
+        arrayToTraverse[parent2Index].top = y + 90;
       }
     // ----------------------------------------------
-   } 
-  }
-    if(arrayToTraverse[i].parent1 !== -1){
-             // that.setPositionForParents($("#"+arrayToTraverse[i].character+i), arrayToTraverse.filter(function (el) {return el.level = level + 1}));
-   // ---------------------
-      var node = $("#"+arrayToTraverse[i].character+i);
-      var position = node.position();
-      var y = position.top;
-      var x = position.left;
-
-      var parent1Index = arrayToTraverse.findIndex(el => el.id == arrayToTraverse[i].parent1);
-      var parent2Index = arrayToTraverse.findIndex(el => el.id == arrayToTraverse[i].parent2);
-      if(parent1Index !== -1){
-        arrayToTraverse[parent1Index].left = x - 5;
-        arrayToTraverse[parent1Index].top = y - 5;
-        arrayToTraverse[parent2Index].left = x + 5;
-        arrayToTraverse[parent2Index].top = y + 5;
-      }
-    // ----------------------------------------------
+   // } 
   }
 }
 var draw = function(arrayToTraverse){
@@ -75,19 +57,18 @@ var draw = function(arrayToTraverse){
   for (var i = arrayToTraverse.length-1; i>= 0; i--){
         if(arrayToTraverse[i].frequency !== level){
           $( "<div id=level"+arrayToTraverse[i].frequency+" class='nextLevel'>").appendTo(".graph");
-          oldLevel = level;
-
-          if(oldLevel !== level && oldLevel !== undefined){
-            that.setPositionForParents(oldLevel + 1);
+          if(i == arrayToTraverse.length-1){
+              $( "#level"+arrayToTraverse[i].frequency).addClass("level1");
           }
-
           level = arrayToTraverse[i].frequency;
         }
-        $( "<div id="+arrayToTraverse[i].character+arrayToTraverse[i].binary+" class='numberCircle'>"+"F: "+arrayToTraverse[i].frequency+"C: "+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
+        $( "<div id="+arrayToTraverse[i].character+arrayToTraverse[i].frequency+" class='numberCircle'>"+"    "+arrayToTraverse[i].frequency+" C: "+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
         
+        setPositionForParents(i, arrayToTraverse);
+
         if(arrayToTraverse[i].top || arrayToTraverse[i].left){
-          $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].binary).css("top", arrayToTraverse[i].top);
-          $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].binary).css("left", arrayToTraverse[i].left);
+          $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].frequency).css("top", arrayToTraverse[i].top);
+          $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].frequency).css("left", arrayToTraverse[i].left);
         }
   }
 }
