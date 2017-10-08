@@ -1,6 +1,6 @@
 
 
-var inputString = "Build the Huffman tree for the set of characters in this question. Include all characters including punctuation and spaces. How many bits are saved in the storage of this question using Huffman trees versus a storage based on a fixed-length encoding such as ASCII?";
+var inputString = "Hiabhijeet";
 var initiArray = [];
 var arrayToTraverse = [];
 var removedList = [];
@@ -12,7 +12,8 @@ for (var i = 0, len = inputString.length; i < len; i++) {
     "parent2" : -1,
     "id" : guid(),
     "character" : inputString[i],
-    "frequency" : (inputString.split(inputString[i]).length - 1)
+    "frequency" : (inputString.split(inputString[i]).length - 1),
+    "level" : 0
   };
 
   var found = false;
@@ -65,6 +66,10 @@ for (var i = 0; i < arrayToTraverse.length; i++) {
 console.log("Total Size Requirement : " + (inputString.length * 8) + " bits");
 console.log("Compressed Size : " + currentSize + " bits");
 console.log("Percentage Compression : " + (100 - (Math.round((currentSize/(inputString.length * 8))*100 * 100) / 100)) + "%");
+
+for (var i = 0; i < removedList.length; i++) {
+  console.log("Character : " + removedList[i].character + "\t Level : " + removedList[i].level);
+}
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Functions
@@ -127,7 +132,8 @@ function getNewObject(){
     "parent2" : obj2.id,
     "character" : obj1.character + "" + obj2.character,
     "frequency" : obj1.frequency + obj2.frequency,
-    "id" : guid()
+    "id" : guid(),
+    "level" : obj1.level + 1,
   };
 
   removedList.push(obj1);
