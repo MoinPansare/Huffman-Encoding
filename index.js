@@ -7,16 +7,88 @@ this.initiArray = [];
 this.arrayToTraverse = [];
 this.removedList = [];
 
-var draw = function(arrayToTraverse){debugger
+// function setPositionForParents(levelToSet){debugger
+//     if(arrayToTraverse[i].parent1 !== -1){
+//              // that.setPositionForParents($("#"+arrayToTraverse[i].character+i), arrayToTraverse.filter(function (el) {return el.level = level + 1}));
+//    // ---------------------
+//       var node = $("#"+arrayToTraverse[i].character+i);
+//       var position = node.position();
+//       var y = position.top;
+//       var x = position.left;
+
+//       var parent1Index = arrayToTraverse.findIndex(el => el.id == arrayToTraverse[i].parent1);
+//       var parent2Index = arrayToTraverse.findIndex(el => el.id == arrayToTraverse[i].parent2);
+//       if(parent1Index !== -1){
+//         arrayToTraverse[parent1Index].left = x - 5;
+//         arrayToTraverse[parent1Index].top = y - 5;
+//         arrayToTraverse[parent2Index].left = x + 5;
+//         arrayToTraverse[parent2Index].top = y + 5;
+//       }
+//     // ----------------------------------------------
+//   }
+// }
+function setPositionForParents(levelToSet){debugger
+  var parentArray = arrayToTraverse.findIndex(el => el.frequency == levelToSet+1);
+  for(var i = 0; i < parentArray.length; i++){
+    if(parentArray[i].parent1 !== -1){
+             // that.setPositionForParents($("#"+parentArray[i].character+i), parentArray.filter(function (el) {return el.level = level + 1}));
+   // ---------------------
+      var node = $("#"+parentArray[i].character+parentArray[i].binary);
+      var position = node.position();
+      var y = position.top;
+      var x = position.left;
+
+      var parent1Index = arrayToTraverse.findIndex(el => el.id == parentArray[i].parent1);
+      var parent2Index = arrayToTraverse.findIndex(el => el.id == parentArray[i].parent2);
+      if(parent1Index !== -1){
+        arrayToTraverse[parent1Index].left = x - 5;
+        arrayToTraverse[parent1Index].top = y - 5;
+        arrayToTraverse[parent2Index].left = x + 5;
+        arrayToTraverse[parent2Index].top = y + 5;
+      }
+    // ----------------------------------------------
+   } 
+  }
+    if(arrayToTraverse[i].parent1 !== -1){
+             // that.setPositionForParents($("#"+arrayToTraverse[i].character+i), arrayToTraverse.filter(function (el) {return el.level = level + 1}));
+   // ---------------------
+      var node = $("#"+arrayToTraverse[i].character+i);
+      var position = node.position();
+      var y = position.top;
+      var x = position.left;
+
+      var parent1Index = arrayToTraverse.findIndex(el => el.id == arrayToTraverse[i].parent1);
+      var parent2Index = arrayToTraverse.findIndex(el => el.id == arrayToTraverse[i].parent2);
+      if(parent1Index !== -1){
+        arrayToTraverse[parent1Index].left = x - 5;
+        arrayToTraverse[parent1Index].top = y - 5;
+        arrayToTraverse[parent2Index].left = x + 5;
+        arrayToTraverse[parent2Index].top = y + 5;
+      }
+    // ----------------------------------------------
+  }
+}
+var draw = function(arrayToTraverse){
+  var that = this;
   var level;
+  var oldLevel;
   for (var i = arrayToTraverse.length-1; i>= 0; i--){
-        if(arrayToTraverse[i].level !== level){
-          $( "<div id=level"+arrayToTraverse[i].level+" class='nextLevel'>").appendTo(".graph");
-          // $( "<div id="+arrayToTraverse[i].character+i+" class='numberCircle'>"+arrayToTraverse[i].character+"</p>" ).appendTo(".graph #"+arrayToTraverse[i].character+i+"");
-          level = arrayToTraverse[i].level;
+        if(arrayToTraverse[i].frequency !== level){
+          $( "<div id=level"+arrayToTraverse[i].frequency+" class='nextLevel'>").appendTo(".graph");
+          oldLevel = level;
+
+          if(oldLevel !== level && oldLevel !== undefined){
+            that.setPositionForParentss(oldLevel + 1);
+          }
+
+          level = arrayToTraverse[i].frequency;
         }
-        $( "<div id="+arrayToTraverse[i].character+i+" class='numberCircle'>"+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
-      
+        $( "<div id="+arrayToTraverse[i].character+arrayToTraverse[i].binary+" class='numberCircle'>"+"F: "+arrayToTraverse[i].frequency+"C: "+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
+        
+        if(arrayToTraverse[i].top || arrayToTraverse[i].left){
+          $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].binary).css("top", arrayToTraverse[i].top);
+          $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].binary).css("left", arrayToTraverse[i].left);
+        }
   }
 }
 
@@ -28,7 +100,9 @@ for (var i = 0, len = this.inputString.length; i < len; i++) {
     "id" : guid(),
     "character" : this.inputString[i],
     "frequency" : (this.inputString.split(this.inputString[i]).length - 1),
-    "level" : 0
+    "level" : 0,
+    "left": 0,
+    "top": 0
   };
 
   var found = false;
@@ -155,7 +229,9 @@ function getNewObject(that){
     "character" : obj1.character + "" + obj2.character,
     "frequency" : obj1.frequency + obj2.frequency,
     "id" : guid(),
-    "level" : max
+    "level" : max,
+    "left": 0,
+    "top": 0
   };
 
   that.removedList.push(obj1);
