@@ -78,7 +78,7 @@ var draw = function(arrayToTraverse){
           oldLevel = level;
 
           if(oldLevel !== level && oldLevel !== undefined){
-            that.setPositionForParentss(oldLevel + 1);
+            that.setPositionForParents(oldLevel + 1);
           }
 
           level = arrayToTraverse[i].frequency;
