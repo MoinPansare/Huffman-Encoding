@@ -64,12 +64,13 @@ var draw = function(arrayToTraverse){
         }
         $( "<div id="+arrayToTraverse[i].character+arrayToTraverse[i].frequency+" class='numberCircle'>"+"    "+arrayToTraverse[i].frequency+" C: "+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
         
-        setPositionForParents(i, arrayToTraverse);
 
         if(arrayToTraverse[i].top || arrayToTraverse[i].left){
           $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].frequency).css("top", arrayToTraverse[i].top);
           $("#"+ arrayToTraverse[i].character+arrayToTraverse[i].frequency).css("left", arrayToTraverse[i].left);
         }
+        
+        setPositionForParents(i, arrayToTraverse);
   }
 }
 
