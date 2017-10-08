@@ -24,13 +24,15 @@ section {
 }
 .graph {
   height: 230%;
-  display: inline-flex;
+  display: grid;
   /*background-color: lightblue;*/
 	    height: 200px;
 	    width: 98.5%;
 	    position: absolute;
 	    left: 0;
-	    bottom: 0;
+}
+.nextLevel{
+  display: inline-flex;
 }
 section:last-child {
   margin-bottom: 0;
@@ -250,6 +252,7 @@ button:focus {
 }
 .numberCircle {
     border-radius: 50%;
+        width: auto !important;
     behavior: url(PIE.htc); /* remove if you don't care about IE8 */
 		margin: 0px 8px 0px 8px;		
     width: 36px;

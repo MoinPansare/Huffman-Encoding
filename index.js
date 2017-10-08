@@ -7,8 +7,17 @@ this.initiArray = [];
 this.arrayToTraverse = [];
 this.removedList = [];
 
-var draw = function(array){debugger
-  $( "<div class='numberCircle'>"+array.character+"</p>" ).appendTo(".graph");
+var draw = function(arrayToTraverse){debugger
+  var level;
+  for (var i = arrayToTraverse.length-1; i>= 0; i--){
+        if(arrayToTraverse[i].level !== level){
+          $( "<div id=level"+arrayToTraverse[i].level+" class='nextLevel'>").appendTo(".graph");
+          // $( "<div id="+arrayToTraverse[i].character+i+" class='numberCircle'>"+arrayToTraverse[i].character+"</p>" ).appendTo(".graph #"+arrayToTraverse[i].character+i+"");
+          level = arrayToTraverse[i].level;
+        }
+        $( "<div id="+arrayToTraverse[i].character+i+" class='numberCircle'>"+arrayToTraverse[i].character+"</p>" ).appendTo("#level"+level);
+      
+  }
 }
 
 for (var i = 0, len = this.inputString.length; i < len; i++) {
@@ -18,7 +27,8 @@ for (var i = 0, len = this.inputString.length; i < len; i++) {
     "parent2" : -1,
     "id" : guid(),
     "character" : this.inputString[i],
-    "frequency" : (this.inputString.split(this.inputString[i]).length - 1)
+    "frequency" : (this.inputString.split(this.inputString[i]).length - 1),
+    "level" : 0
   };
 
   var found = false;
@@ -32,11 +42,6 @@ for (var i = 0, len = this.inputString.length; i < len; i++) {
     this.initiArray.push(obj);
     this.arrayToTraverse.push(obj);
   }
-}
-
-for (var i = 0; i < this.initiArray.length; i++) {
-  console.log("Character : " + this.initiArray[i].character + "\tFrequency : " + this.initiArray[i].frequency);
-  draw(this.initiArray[i]);
 }
 
 // console.log("\n\n\n Adding first 2 objects");
@@ -69,14 +74,20 @@ for (var i = 0; i < this.arrayToTraverse.length; i++) {
   console.log("Character : " + this.arrayToTraverse[i].character + "\t encoding : " + binary);
   currentSize = currentSize + binary.length * that.arrayToTraverse[i].frequency;
 }
+
+draw(this.removedList);
+
 $("#totalSize").text((this.inputString.length * 8) + " bits");
 $("#compressedSize").text(currentSize + " bits");
 $("#PercentageCompression").text(currentSize + (100 - (Math.round((currentSize/(this.inputString.length * 8))*100 * 100) / 100)) + "%");
 
+for (var i = 0; i < this.removedList.length; i++) {
+  console.log("Character : " + this.removedList[i].character + "\t Level : " + this.removedList[i].level);
+}
 // console.log("Total Size Requirement : " + (this.inputString.length * 8) + " bits");
 // console.log("Compressed Size : " + currentSize + " bits");
 // console.log("Percentage Compression : " + (100 - (Math.round((currentSize/(this.inputString.length * 8))*100 * 100) / 100)) + "%");
-N
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Functions
 
@@ -133,12 +144,18 @@ function getNewObject(that){
   var obj1 = that.initiArray[0];
   var obj2 = that.initiArray[1];
 
+  var max = obj1.level + 1;
+  if (obj2.level > obj1.level) {
+    max = obj2.level + 1;
+  }
+
   var newObject = {
     "parent1" : obj1.id,
     "parent2" : obj2.id,
     "character" : obj1.character + "" + obj2.character,
     "frequency" : obj1.frequency + obj2.frequency,
-    "id" : guid()
+    "id" : guid(),
+    "level" : max
   };
 
   that.removedList.push(obj1);
