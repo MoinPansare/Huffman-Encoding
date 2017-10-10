@@ -1,6 +1,17 @@
 /* ============================================================
   COMMON
 ============================================================ */
+.firstLevel{
+      display: -webkit-box;
+    bottom: 0;
+    position: absolute;
+}
+.firstLevel div{
+    margin-left: auto;
+    margin-right: auto;
+    position: static;
+  }
+}
 .result label, h2{
 	display: inline;
     vertical-align: top;
@@ -272,4 +283,21 @@ button:focus {
     text-align: center;
 
     font: 32px Arial, sans-serif;
+}
+
+.container-try {
+  /*position: fixed;*/
+  bottom: 1em;
+  right: 1em;
+  width: 20em;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.container-items {
+  margin: 1em 0 0;
+  padding: 1em;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #999;
 }
