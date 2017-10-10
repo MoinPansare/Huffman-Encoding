@@ -34,13 +34,10 @@ section {
   height: 100%;
 }
 .graph {
-  height: 230%;
-  display: grid;
-  /*background-color: lightblue;*/
-	    height: 200px;
-	    width: 98.5%;
-	    position: absolute;
-	    left: 0;
+  width: 100%;
+    overflow: auto;
+    position: relative;
+    height: 100%;
 }
 .nextLevel{
   display: inline-flex;
@@ -266,23 +263,31 @@ button:focus {
 
     margin-right: auto;
 }
+.container{
+    height: 300px;
+    width: 1000px;
+  }
 .numberCircle {
   
     position: absolute;
     border-radius: 50%;
-        width: auto !important;
+    /*width: auto !important;*/
     behavior: url(PIE.htc); /* remove if you don't care about IE8 */
 		/*margin: 0px 8px 0px 8px;		*/
-    width: 36px;
-    height: 36px;
+  /*  width: 10px;
+    height: 30px;*/
     padding: 8px;
+
+    height: 3% !important;
+    font-size: inherit;
+    font-weight: bold;
 
     background: #fff;
     border: 2px solid #666;
     color: #666;
     text-align: center;
 
-    font: 32px Arial, sans-serif;
+    /*font: 32px Arial, sans-serif;*/
 }
 
 .container-try {

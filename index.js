@@ -1,13 +1,15 @@
 $(document).ready(function() {
   $("#Evaluate").click(function(){
       $("#graph").html("");
+      $('.container').height($(window).height() - 150);
+      $('.container').width($(window).width() - 50);
       this.inputString = $("input").val();//"Build the Huffman tree for the set of characters in this question. Include all characters including punctuation and spaces. How many bits are saved in the storage of this question using Huffman trees versus a storage based on a fixed-length encoding such as ASCII?";
       this.initiArray = [];
       this.arrayToTraverse = [];
       this.removedList = [];
       this.maxLevel = 0;
 
-      function setPositionForChildNodes(level, arrayToTraverse){
+      function setPositionForChildNodes(level, arrayToTraverse, that){
         // var parentLevelArray = arrayToTraverse.filter(arr){return arr.level ===  i - 1};
         var childLevelArray = arrayToTraverse.filter(function(arr){return arr.level ===  level});
 
@@ -23,15 +25,23 @@ $(document).ready(function() {
 
             if(p1 && p2){
               arrayToTraverse[childIndex].left = ((parent1Position.left < parent2Position.left) ? parent1Position.left : parent2Position.left) + Math.abs((Math.abs(parent1Position.left) - Math.abs(parent2Position.left))/2);
-              arrayToTraverse[childIndex].top = (((parent1Position.top < parent2Position.top) ? parent1Position.top : parent2Position.top)) - 100;
+              // if(that.maxLevel > 2){
+                arrayToTraverse[childIndex].top = (((parent1Position.top < parent2Position.top) ? parent1Position.top : parent2Position.top)) - 60;
+              // }else{
+              //   arrayToTraverse[childIndex].top = (((parent1Position.top < parent2Position.top) ? parent1Position.top : parent2Position.top)) - 100;
+              // }
             }
           }
         }else{
           for(var j = 0; j < childLevelArray.length; j++){
             var childIndex = arrayToTraverse.findIndex(function(arr){return arr.id === childLevelArray[j].id});
-
-            arrayToTraverse[childIndex].left = 10 + (100 * j);
-            arrayToTraverse[childIndex].top = 900;
+            debugger
+            // if(that.maxLevel > 2){
+              arrayToTraverse[childIndex].left = 10 + (30 * j);
+            // }else{
+            //   arrayToTraverse[childIndex].left = 10 + (100 * j);
+            // }
+            arrayToTraverse[childIndex].bottom = 0;
           }
         }
       }
@@ -43,21 +53,30 @@ $(document).ready(function() {
 
           for (var i = 0; i <= that.maxLevel; i++){
               
-              setPositionForChildNodes(i, arrayToTraverse);
+              setPositionForChildNodes(i, arrayToTraverse, that);
               
               var levelArray = arrayToTraverse.filter(function(arr){return arr.level ===  i});
                 
                 for(var j = 0; j < levelArray.length; j++){
                   $( "<div id="+levelArray[j].id+" class='numberCircle' title='"+levelArray[j].character+"''>"+levelArray[j].frequency+"</div>").appendTo("#graph");
                   if(levelArray[j].parent1 === -1){
-                    $("#"+levelArray[j].id).css("border-radius", 0);
                     $("#"+levelArray[j].id).html(levelArray[j].character);
                   }
                   if(levelArray[j].top || levelArray[j].left){
-                    $("#"+ levelArray[j].id).css("top", levelArray[j].top);
+                    if(levelArray[j].bottom === 0){
+                      $("#"+ levelArray[j].id).css("bottom", 0);  
+                    }else{
+                      $("#"+ levelArray[j].id).css("top", levelArray[j].top);
+                    }
                     $("#"+ levelArray[j].id).css("left", levelArray[j].left);
                     // $("#"+ levelArray[j].id).css("bottom", levelArray[j].left);
                   }
+
+                  // if(that.maxLevel > 2){
+                  //     $("#"+levelArray[j].id).css("font-weight", "bold");
+                  //     $("#"+levelArray[j].id).css("font-size", "small");
+                  //     $("#"+levelArray[j].id).css("height", "3%");
+                  // }
                 }
           }
       }
@@ -187,6 +206,8 @@ $(document).ready(function() {
           "left": 0,
           "top": 0
         };
+        
+        
 
         that.removedList.push(obj1);
         that.removedList.push(obj2);
