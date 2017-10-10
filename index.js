@@ -55,7 +55,7 @@ $(document).ready(function() {
               var levelArray = arrayToTraverse.filter(function(arr){return arr.level ===  i});
                 
                 for(var j = 0; j < levelArray.length; j++){
-                  $( "<div id="+levelArray[j].id+" class='numberCircle'>"+levelArray[j].frequency+" "+levelArray[j].character+"</p>" ).appendTo("#graph");
+                  $( "<div id="+levelArray[j].id+" class='numberCircle'>"+levelArray[j].frequency+levelArray[j].character+"</div>").appendTo("#graph");
                   
                   if(levelArray[j].top || levelArray[j].left){
                     $("#"+ levelArray[j].id).css("top", levelArray[j].top);
