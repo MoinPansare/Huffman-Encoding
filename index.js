@@ -43,20 +43,16 @@ $(document).ready(function() {
 
           for (var i = 0; i <= that.maxLevel; i++){
               
-              // if(i === 0){
-              //   $( "<div id=level"+arrayToTraverse[i].id+" class='firstLevel'>").appendTo("#graph");
-              // }
-              // else{
-              //   $( "<div id=level"+arrayToTraverse[i].id+" class='nextLevel'>").appendTo(".graph");
-              // }
-
               setPositionForChildNodes(i, arrayToTraverse);
               
               var levelArray = arrayToTraverse.filter(function(arr){return arr.level ===  i});
                 
                 for(var j = 0; j < levelArray.length; j++){
-                  $( "<div id="+levelArray[j].id+" class='numberCircle'>"+levelArray[j].frequency+levelArray[j].character+"</div>").appendTo("#graph");
-                  
+                  $( "<div id="+levelArray[j].id+" class='numberCircle' title='"+levelArray[j].character+"''>"+levelArray[j].frequency+"</div>").appendTo("#graph");
+                  if(levelArray[j].parent1 === -1){
+                    $("#"+levelArray[j].id).css("border-radius", 0);
+                    $("#"+levelArray[j].id).html(levelArray[j].character);
+                  }
                   if(levelArray[j].top || levelArray[j].left){
                     $("#"+ levelArray[j].id).css("top", levelArray[j].top);
                     $("#"+ levelArray[j].id).css("left", levelArray[j].left);
