@@ -49,51 +49,82 @@ $(document).ready(function() {
       function prepareArrays (rootItem, level, mainArr){
         var p1_id = rootItem.parent1;
         var p2_id= rootItem.parent2;
-debugger
+
         var parent1 = mainArr.find(function(arr){return arr.id === p1_id});
         var parent2 = mainArr.find(function(arr){return arr.id === p2_id});
-
-        if(levelArray[level - 1]){
-          levelArray[level - 1].push(parent1);
-          levelArray[level - 1].push(parent2);
-        }else{
-          levelArray[level - 1] = parent1;
-          levelArray[levelArray].push([parent2]);
-        }
-        
-       if(parent1.level !== 0){
-          prepareArrays(parent1, level - 1, mainArr);
+        if(parent1 || parent2){
+          if(levelArray[level - 1]){
+            levelArray[level - 1].push(parent1);
+            levelArray[level - 1].push(parent2);
+          }else{
+            levelArray[level - 1] = [parent1];
+            levelArray[level - 1].push(parent2);
+          }
+          
+         if(parent1.level !== 0){
+            prepareArrays(parent1, level - 1, mainArr);
+         }
+         if(parent1.level !== 0){
+            prepareArrays(parent2, level - 1, mainArr);
+         }
        }
-       if(parent1.level !== 0){
-          prepareArrays(parent2, level - 1, mainArr);
-       }
+       return levelArray;
       }
 
       var draw = function(arrayToTraverse){
         var that = this;
+debugger
         var level;
-        var oldLevel;debugger
-        prepareArrays(arrayToTraverse[arrayToTraverse.length-1], that.maxLevel, arrayToTraverse);
-          for (var i = 0; i <= that.maxLevel; i++){
-              if(i === 0){
-                var list = arrayToTraverse.filter(function(arr){return arr.level === 0 });
-                for (var i1 = 0; i1 < list.length; i1++) {
-                  for (var j1 = i1+1; j1 < list.length; j1++) {
-                    if (parseInt(list[i1].binary, 2) > parseInt(list[j1].binary, 2)) {
-                      var temp = list[i1];
-                      list[i1] = list[j1];
-                      list[j1] = temp;
-                    }
+        var oldLevel;
+        levelArray = prepareArrays(arrayToTraverse[arrayToTraverse.length-1], that.maxLevel, arrayToTraverse);
+        levelArray[levelArray.length] = [arrayToTraverse[arrayToTraverse.length-1]];
+
+          for (var i = levelArray.length - 1; i >= 0; i--){
+              if(i === levelArray.length - 1){
+                $( "<div id="+(levelArray[i])[0].id+" class='numberCircle' title='"+(levelArray[i])[0].character+"''>"+(levelArray[i])[0].frequency+"</div>").appendTo("#graph");  
+                var left = ($(window).width() - 50)/2;
+                (levelArray[i])[0].left = left;
+                (levelArray[i])[0].top = i;
+                $("#"+(levelArray[i])[0].id).css("left", left);
+                $("#"+(levelArray[i])[0].id).css("top", i);
+                setPositionForParentNodes(levelArray[i], levelArray, i);
+              }else{
+                var levelArray_each = levelArray[i];
+                for(var k = 0; k < levelArray_each.length; k++){
+                  if(levelArray_each[k].level === 0){
+                    $( "<div id="+levelArray_each[k].id+" class='numberCircle' title='"+levelArray_each[k].frequency+"''>"+levelArray_each[k].character+"</div>").appendTo("#graph");  
+                  }else{
+                    $( "<div id="+levelArray_each[k].id+" class='numberCircle' title='"+levelArray_each[k].character+"''>"+levelArray_each[k].frequency+"</div>").appendTo("#graph");  
+                  }
+                  if(levelArray_each[k].top)
+                  {
+                    $("#"+ levelArray_each[k].id).css("top", levelArray_each[k].top);
+                    $("#"+ levelArray_each[k].id).css("left", levelArray_each[k].left);
                   }
                 }
-                drawLevel(list, that, 0, arrayToTraverse);
-              } else{             
-                drawLevel(arrayToTraverse.filter(function(arr){return arr.level === i}), that, i, arrayToTraverse);
+                setPositionForParentNodes(levelArray_each, levelArray, i);
               }
           }
       }
 
-      function drawLevel(array, that, level, mainArr){debugger
+      function setPositionForParentNodes(array, levelArray, arrayIndex){
+          for(var j = 0; j < array.length; j++){
+            var p1 = levelArray[arrayIndex-1].find(function(arr){return arr.id === array[j].parent1});
+            var p2 = levelArray[arrayIndex-1].find(function(arr){return arr.id === array[j].parent2});
+            if(p1 !== undefined){
+              var childPosition = $("#"+ array[j].id).position();
+              p1Index = (levelArray[arrayIndex-1]).findIndex(function(arr){return arr.id === p1.id});
+              p2Index = (levelArray[arrayIndex-1]).findIndex(function(arr){return arr.id === p2.id});
+
+              (levelArray[arrayIndex-1])[p1Index].left = childPosition.left - (20 * arrayIndex);
+              (levelArray[arrayIndex-1])[p1Index].top = childPosition.top + (50 );
+              (levelArray[arrayIndex-1])[p2Index].left = childPosition.left + (20 * arrayIndex);
+              (levelArray[arrayIndex-1])[p2Index].top = childPosition.top + (50 );
+            }
+          }
+      }
+
+      function drawLevel(array, that, level, mainArr){
           var top; 
           for(var j = 0; j < array.length; j++){
               if(level === 0){
@@ -127,7 +158,7 @@ debugger
       }
 
 
-      function setPositionForChildNodes(levelPrinted, that, mainArr, level){debugger
+      function setPositionForChildNodes(levelPrinted, that, mainArr, level){
         var top;
         if(level !== 0){
           top = $("#"+ mainArr.find(function(arr){ return arr.level === 0 }).id).position().top;
@@ -177,7 +208,7 @@ debugger
 
       this.initiArray = sortArray(this.initiArray);
       var that = this;
-      debugger
+
       while (this.initiArray.length > 1) {
         getNewObject(that);
         this.initiArray = sortArray(this.initiArray);
@@ -304,7 +335,7 @@ debugger
         }
         return list;
       }
-      function sortBinaryArray(removedList){debugger
+      function sortBinaryArray(removedList){
         var list = removedList.filter(function(arr){return arr.level === 0 });
         for (var i = 0; i < list.length; i++) {
           for (var j = i+1; j < list.length; j++) {
