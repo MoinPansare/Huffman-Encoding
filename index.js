@@ -116,10 +116,10 @@ debugger
               p1Index = (levelArray[arrayIndex-1]).findIndex(function(arr){return arr.id === p1.id});
               p2Index = (levelArray[arrayIndex-1]).findIndex(function(arr){return arr.id === p2.id});
 
-              (levelArray[arrayIndex-1])[p1Index].left = childPosition.left - (20 * arrayIndex);
-              (levelArray[arrayIndex-1])[p1Index].top = childPosition.top + (50 );
-              (levelArray[arrayIndex-1])[p2Index].left = childPosition.left + (20 * arrayIndex);
-              (levelArray[arrayIndex-1])[p2Index].top = childPosition.top + (50 );
+              (levelArray[arrayIndex-1])[p1Index].left = childPosition.left - (40 * arrayIndex);
+              (levelArray[arrayIndex-1])[p1Index].top = childPosition.top + (60);
+              (levelArray[arrayIndex-1])[p2Index].left = childPosition.left + (40 * arrayIndex);
+              (levelArray[arrayIndex-1])[p2Index].top = childPosition.top + (60);
             }
           }
       }
