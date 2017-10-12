@@ -73,12 +73,12 @@ $(document).ready(function() {
 
       var draw = function(arrayToTraverse){
         var that = this;
-debugger
+
         var level;
         var oldLevel;
         levelArray = prepareArrays(arrayToTraverse[arrayToTraverse.length-1], that.maxLevel, arrayToTraverse);
         levelArray[levelArray.length] = [arrayToTraverse[arrayToTraverse.length-1]];
-
+        debugger
           for (var i = levelArray.length - 1; i >= 0; i--){
               if(i === levelArray.length - 1){
                 $( "<div id="+(levelArray[i])[0].id+" class='numberCircle' title='"+(levelArray[i])[0].character+"''>"+(levelArray[i])[0].frequency+"</div>").appendTo("#graph");  
@@ -108,18 +108,73 @@ debugger
       }
 
       function setPositionForParentNodes(array, levelArray, arrayIndex){
+          var previousParent2_left;
+          var previousParent2_index;
+          var previousParent1_index;
+          var previousChild_id;
+
+
+          var level3P2;
+
           for(var j = 0; j < array.length; j++){
             var p1 = levelArray[arrayIndex-1].find(function(arr){return arr.id === array[j].parent1});
             var p2 = levelArray[arrayIndex-1].find(function(arr){return arr.id === array[j].parent2});
+
             if(p1 !== undefined){
               var childPosition = $("#"+ array[j].id).position();
               p1Index = (levelArray[arrayIndex-1]).findIndex(function(arr){return arr.id === p1.id});
               p2Index = (levelArray[arrayIndex-1]).findIndex(function(arr){return arr.id === p2.id});
+              if(arrayIndex === (levelArray.length - 2)){
+                if(level3P2 === undefined){
+                  (levelArray[arrayIndex-1])[p1Index].left = childPosition.left - (50 * arrayIndex);
+                  (levelArray[arrayIndex-1])[p1Index].top = childPosition.top + (100);
+                  (levelArray[arrayIndex-1])[p2Index].left = childPosition.left;
+                  (levelArray[arrayIndex-1])[p2Index].top = childPosition.top + (100);
+                  level3P2 = childPosition.left;
+                }else{
+                  (levelArray[arrayIndex-1])[p1Index].left = childPosition.left;
+                  (levelArray[arrayIndex-1])[p1Index].top = childPosition.top + (100);
+                  (levelArray[arrayIndex-1])[p2Index].left = childPosition.left + (50 * arrayIndex);
+                  (levelArray[arrayIndex-1])[p2Index].top = childPosition.top + (100);
+                }
+              } else if(arrayIndex === (levelArray.length - 1)){
+                (levelArray[arrayIndex-1])[p1Index].left = childPosition.left - (60 * arrayIndex);
+                (levelArray[arrayIndex-1])[p1Index].top = childPosition.top + (100);
+                (levelArray[arrayIndex-1])[p2Index].left = childPosition.left + (60 * arrayIndex);
+                (levelArray[arrayIndex-1])[p2Index].top = childPosition.top + (100);
+              }else{
+                (levelArray[arrayIndex-1])[p1Index].left = childPosition.left - (40 * arrayIndex);
+                (levelArray[arrayIndex-1])[p1Index].top = childPosition.top + (100);
+                (levelArray[arrayIndex-1])[p2Index].left = childPosition.left + (40 * arrayIndex);
+                (levelArray[arrayIndex-1])[p2Index].top = childPosition.top + (100);
 
-              (levelArray[arrayIndex-1])[p1Index].left = childPosition.left - (40 * arrayIndex);
-              (levelArray[arrayIndex-1])[p1Index].top = childPosition.top + (60);
-              (levelArray[arrayIndex-1])[p2Index].left = childPosition.left + (40 * arrayIndex);
-              (levelArray[arrayIndex-1])[p2Index].top = childPosition.top + (60);
+                if(previousParent2_left !== undefined){debugger;
+                  if((((levelArray[arrayIndex-1])[p1Index].left) - previousParent2_left) <= 30){
+                    var previousChildPos = $("#"+ previousChild_id).position();
+                    if((levelArray[arrayIndex-1])[previousParent1_index].left != previousChildPos.left){
+                      (levelArray[arrayIndex-1])[previousParent2_index].left = previousChildPos.left;
+                    }else{
+                      (levelArray[arrayIndex-1])[previousParent1_index].left = previousChildPos.left - (20 * arrayIndex);
+                      (levelArray[arrayIndex-1])[previousParent2_index].left = previousChildPos.left + (20 * arrayIndex);
+                    }
+
+                    (levelArray[arrayIndex-1])[p1Index].left = childPosition.left;
+
+                    //check again
+                    var diff = (levelArray[arrayIndex-1])[p1Index].left - ((levelArray[arrayIndex-1])[previousParent2_index].left);
+                    if(diff < 30){
+                      (levelArray[arrayIndex-1])[p1Index].left = (levelArray[arrayIndex-1])[p1Index].left + (20 * (levelArray[arrayIndex-1])[p1Index].frequency);
+                      (levelArray[arrayIndex-1])[previousParent2_index].left = (levelArray[arrayIndex-1])[previousParent2_index].left - 20;
+                    }
+
+                    (levelArray[arrayIndex-1])[p2Index].left = childPosition.left + (50 * arrayIndex);
+                  }
+                }
+                previousParent2_left = (levelArray[arrayIndex-1])[p2Index].left;
+                previousChild_id = array[j].id;
+                previousParent2_index = p2Index;
+                previousParent1_index = p1Index;
+              }
             }
           }
       }
