@@ -9,42 +9,27 @@ $(document).ready(function() {
       this.removedList = [];
       this.maxLevel = 0;
       var levelArray = [];
-      // function setPositionForChildNodes(level, arrayToTraverse, that){
-      //   // var parentLevelArray = arrayToTraverse.filter(arr){return arr.level ===  i - 1};
-      //   var childLevelArray = arrayToTraverse.filter(function(arr){return arr.level ===  level});
 
-      //   if(level !== 0){
-      //     for(var j = 0; j < childLevelArray.length; j++){
-      //       var p1 = arrayToTraverse.find(function(arr){return arr.id === childLevelArray[j].parent1});
-      //       var p2 = arrayToTraverse.find(function(arr){return arr.id === childLevelArray[j].parent2});
+//shahista code starts
 
-      //       var childIndex = arrayToTraverse.findIndex(function(arr){return arr.id === childLevelArray[j].id});
+      function linedraw(ax,ay,bx,by)
+      {
+          if(ay>by)
+          {
+              bx=ax+bx;  
+              ax=bx-ax;
+              bx=bx-ax;
+              by=ay+by;  
+              ay=by-ay;  
+              by=by-ay;
+          }
+          var calc=Math.atan((ay-by)/(bx-ax));
+          calc=calc*180/Math.PI;
+          var length=Math.sqrt((ax-bx)*(ax-bx)+(ay-by)*(ay-by));
+          var div = document.getElementById('graph');
 
-      //       var parent1Position = $("#"+ p1.id).position();
-      //       var parent2Position = $("#"+ p2.id).position();
-
-      //       if(p1 && p2){
-      //         arrayToTraverse[childIndex].left = ((parent1Position.left < parent2Position.left) ? parent1Position.left : parent2Position.left) + Math.abs((Math.abs(parent1Position.left) - Math.abs(parent2Position.left))/2);
-      //         // if(that.maxLevel > 2){
-      //           arrayToTraverse[childIndex].top = (((parent1Position.top < parent2Position.top) ? parent1Position.top : parent2Position.top)) - 60;
-      //         // }else{
-      //         //   arrayToTraverse[childIndex].top = (((parent1Position.top < parent2Position.top) ? parent1Position.top : parent2Position.top)) - 100;
-      //         // }
-      //       }
-      //     }
-      //   }else{
-      //     for(var j = 0; j < childLevelArray.length; j++){
-      //       var childIndex = arrayToTraverse.findIndex(function(arr){return arr.id === childLevelArray[j].id});
-      //       debugger
-      //       // if(that.maxLevel > 2){
-      //         arrayToTraverse[childIndex].left = 10 + (30 * j);
-      //       // }else{
-      //       //   arrayToTraverse[childIndex].left = 10 + (100 * j);
-      //       // }
-      //       arrayToTraverse[childIndex].bottom = 0;
-      //     }
-      //   }
-      // }
+          div.innerHTML += "<div id='line' style='height:" + length + "px;width:1px;background-color:black;position:absolute;top:" + (ay) + "px;left:" + (ax) + "px;transform:rotate(" + calc + "deg);-ms-transform:rotate(" + calc + "deg);transform-origin:0% 0%;-moz-transform:rotate(" + calc + "deg);-moz-transform-origin:0% 0%;-webkit-transform:rotate(" + calc  + "deg);-webkit-transform-origin:0% 0%;-o-transform:rotate(" + calc + "deg);-o-transform-origin:0% 0%;'></div>"
+      }
 
       function prepareArrays (rootItem, level, mainArr){
         var p1_id = rootItem.parent1;
@@ -91,8 +76,10 @@ $(document).ready(function() {
               }else{
                 var levelArray_each = levelArray[i];
                 for(var k = 0; k < levelArray_each.length; k++){
-                  if(levelArray_each[k].level === 0){
-                    $( "<div id="+levelArray_each[k].id+" class='numberCircle' title='"+levelArray_each[k].frequency+"''>"+levelArray_each[k].character+"</div>").appendTo("#graph");  
+
+                  if(levelArray_each[k].parent1 === -1){
+                    var character = (levelArray_each[k].character === ' ') ? 'space' : levelArray_each[k].character;
+                    $( "<div id="+levelArray_each[k].id+" class='numberCircle' title='"+levelArray_each[k].frequency+"''>"+ character +"</div>").appendTo("#graph");  
                   }else{
                     $( "<div id="+levelArray_each[k].id+" class='numberCircle' title='"+levelArray_each[k].character+"''>"+levelArray_each[k].frequency+"</div>").appendTo("#graph");  
                   }
@@ -101,8 +88,12 @@ $(document).ready(function() {
                     $("#"+ levelArray_each[k].id).css("top", levelArray_each[k].top);
                     $("#"+ levelArray_each[k].id).css("left", levelArray_each[k].left);
                   }
+                  // var parent = child1 || child2;
+                  // linedraw(parent.left, parent.top, levelArray_each[k].left, levelArray_each[k].top);
                 }
-                setPositionForParentNodes(levelArray_each, levelArray, i);
+                if(i!=0){
+                  setPositionForParentNodes(levelArray_each, levelArray, i);
+                }
               }
           }
       }
@@ -178,62 +169,7 @@ $(document).ready(function() {
             }
           }
       }
-
-      function drawLevel(array, that, level, mainArr){
-          var top; 
-          for(var j = 0; j < array.length; j++){
-              if(level === 0){
-              $( "<div id="+array[j].id+" class='numberCircle' title='"+array[j].binary+"''>"+array[j].frequency+"</div>").appendTo("#graph");
-              }else{
-              $( "<div id="+array[j].id+" class='numberCircle' title='"+array[j].character+"''>"+array[j].frequency+"</div>").appendTo("#graph");
-              }
-
-              if(array[j].parent1 === -1){
-                $("#"+array[j].id).html(array[j].character);
-              }
-
-              if(level === 0){
-                $("#"+ array[j].id).css("bottom", 0);  
-                $("#"+ array[j].id).css("bottom", 0);  
-                $("#"+ array[j].id).css("left", 10 + (30 * j));
-              }
-
-                if(array[j].top)
-                {
-                  $("#"+ array[j].id).css("top", array[j].top);
-                  $("#"+ array[j].id).css("left", array[j].left);
-                }
-                else{
-                  top = $("#"+ array[j].id).position().top;
-                  $("#"+ array[j].id).css("top", top);
-                  $("#"+ array[j].id).css("left", 10 + (30 * j)); 
-                }
-          }
-          setPositionForChildNodes(array, that, mainArr, level);
-      }
-
-
-      function setPositionForChildNodes(levelPrinted, that, mainArr, level){
-        var top;
-        if(level !== 0){
-          top = $("#"+ mainArr.find(function(arr){ return arr.level === 0 }).id).position().top;
-        }
-        for(var i=0; i<levelPrinted.length; i++){
-          var childIndex = mainArr.findIndex(function(arr){ return arr.parent1 === levelPrinted[i].id });
-          if(childIndex === -1){
-            childIndex = mainArr.findIndex(function(arr){ return arr.parent2 === levelPrinted[i].id });
-          }
-          if(childIndex !== -1){
-            var parent1 = mainArr.find(function(arr){ return arr.id === mainArr[childIndex].parent1 });
-            var parent2 = mainArr.find(function(arr){ return arr.id === mainArr[childIndex].parent2 });
-            var parent1Position = $("#"+ parent1.id).position();
-            var parent2Position = $("#"+ parent2.id).position();
-
-            mainArr[childIndex].left = ((parent1Position.left < parent2Position.left) ? parent1Position.left : parent2Position.left) + (Math.abs((Math.abs(parent1Position.left) - Math.abs(parent2Position.left)))/2);
-            mainArr[childIndex].top = (top || parent2Position.top) - (30  * (mainArr[childIndex].level + 1));
-          }
-        }
-      }
+//shahista code ends
 
       for (var i = 0, len = this.inputString.length; i < len; i++) {
 
